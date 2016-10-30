@@ -1,8 +1,10 @@
 package xy.com.mysoul;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,11 +12,14 @@ import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import xy.com.mysoul.base.BaseActivity;
+import xy.com.mysoul.fragment.FragmentFactory;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
+    private int frameLayoutId = R.id.fl_content;
     @BindView(R.id.tabs_main)
     TabLayout tabsMain;
 
@@ -28,10 +33,10 @@ public class MainActivity extends Activity {
     }
 
     private void initListener() {
-           /*下两行代码影响TabLayout图标的显示，所以下面自己处理了逻辑*/
+           /*下两行代码是和viewpager绑定的，影响TabLayout图标的显示，所以下面自己处理了逻辑*/
 
-//        tabs_main.setupWithViewPager(mViewPager);//将TabLayout和ViewPager关联起来。
-//        tabs_main.setTabsFromPagerAdapter(contentAdapter);
+        /*tabsMain.setupWithViewPager(mViewPager);//将TabLayout和ViewPager关联起来。
+        tabsMain.setTabsFromPagerAdapter(contentAdapter);*/
         tabsMain.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -69,6 +74,7 @@ public class MainActivity extends Activity {
 //                        setSlidingMenuEnable(false);
                         break;
                 }
+                showFrl(i);
             }
 
             @Override
@@ -101,6 +107,9 @@ public class MainActivity extends Activity {
         });
     }
 
+    /**
+     * 给TabLayout设置Tabs，并且初始化第一个fragment
+     */
     public void setTabs() {
         //设置tab模式，当前为系统默认模式
         tabsMain.setTabMode(TabLayout.MODE_FIXED);
@@ -115,8 +124,9 @@ public class MainActivity extends Activity {
         tabsMain.addTab(tab2);
         tabsMain.addTab(tab3);
         tabsMain.addTab(tab4);
+        //程序启动就加载第一个fragment
+        showFrl(0);
     }
-
 
 
     /**
@@ -149,4 +159,38 @@ public class MainActivity extends Activity {
         return iv;
     }
 
+    /**
+     * 根据index设置显示的fragment
+     *
+     * @param index
+     */
+    protected void showFrl(int index) {
+
+        FragmentManager manage = getSupportFragmentManager();
+        FragmentTransaction transaction = manage.beginTransaction();
+        Fragment fm = FragmentFactory.getFragment(index);
+        if (fm.isVisible()) {
+            return;
+        }
+        if (fm.isAdded()) {
+            fm.onResume();
+        } else {
+            transaction.add(frameLayoutId, fm);
+        }
+
+        for (int i = 0; i < FragmentFactory.getFragmentCount(); i++) {
+            Fragment fragment = FragmentFactory.getFragments().get(i);
+            if (fragment != null) {
+                FragmentTransaction ft = this.getSupportFragmentManager()
+                        .beginTransaction();
+                if (index == i) {
+                    ft.show(fragment);
+                } else {
+                    ft.hide(fragment);
+                }
+                ft.commit();
+            }
+        }
+        transaction.commit();
+    }
 }
