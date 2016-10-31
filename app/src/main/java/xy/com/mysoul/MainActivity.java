@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xy.com.mysoul.base.BaseActivity;
+import xy.com.mysoul.base.BaseFragment;
 import xy.com.mysoul.fragment.FragmentFactory;
 
 public class MainActivity extends BaseActivity {
@@ -168,7 +169,7 @@ public class MainActivity extends BaseActivity {
 
         FragmentManager manage = getSupportFragmentManager();
         FragmentTransaction transaction = manage.beginTransaction();
-        Fragment fm = FragmentFactory.getFragment(index);
+        BaseFragment fm = FragmentFactory.getFragment(index);
         if (fm.isVisible()) {
             return;
         }
@@ -179,12 +180,13 @@ public class MainActivity extends BaseActivity {
         }
 
         for (int i = 0; i < FragmentFactory.getFragmentCount(); i++) {
-            Fragment fragment = FragmentFactory.getFragments().get(i);
+            BaseFragment fragment = FragmentFactory.getFragments().get(i);
             if (fragment != null) {
                 FragmentTransaction ft = this.getSupportFragmentManager()
                         .beginTransaction();
                 if (index == i) {
                     ft.show(fragment);
+                    fragment.loadData();
                 } else {
                     ft.hide(fragment);
                 }

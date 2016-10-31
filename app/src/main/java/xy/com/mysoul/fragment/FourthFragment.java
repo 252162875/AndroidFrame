@@ -5,8 +5,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import xy.com.mysoul.R;
 import xy.com.mysoul.base.BaseFragment;
+import xy.com.mysoul.utils.UiUtils;
+import xy.com.mysoul.view.MainFragmentPage;
 
 public class FourthFragment extends BaseFragment {
     @Nullable
@@ -16,7 +20,16 @@ public class FourthFragment extends BaseFragment {
     }
 
     @Override
+    public MainFragmentPage.ResultState fragmentLoadData() {
+
+        return MainFragmentPage.ResultState.SUCCESS;
+    }
+
+    @Override
     public View fragmentCreateSuccessView() {
-        return null;
+        TextView tv = new TextView(UiUtils.getContext());
+        tv.setText(this.getClass().getSimpleName());
+        tv.setTextColor(UiUtils.getColor(R.color.pinkline));
+        return tv;
     }
 }

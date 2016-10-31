@@ -16,7 +16,7 @@ public abstract class MainFragmentPage extends FrameLayout {
     public static final int STATE_SUCCESS = 3;
     public static final int STATE_EMPTY = 4;
 
-    public int mCurrentState = STATE_ERROR;
+    public int mCurrentState = STATE_NONE;
 
     private View mErrorView;
     private View mLoadingView;
@@ -73,19 +73,57 @@ public abstract class MainFragmentPage extends FrameLayout {
         }
     }
 
+    // 加载数据，这个方法是给别人调用的
+    public void loadData() {
+        if (mCurrentState != STATE_LOADING) {
+            mCurrentState = STATE_NONE;
+            showRightPage();
+        }
+        if (mCurrentState == STATE_NONE) {
+            // 加载网络数据
+            // 启动子线程
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+
+                    ResultState result = onLoad();
+                    if (result != null) {
+                        mCurrentState = result.state;
+                        UiUtils.runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                showRightPage();
+                            }
+                        });
+
+                    }
+                }
+            }).start();
+        }
+    }
+
+    protected abstract ResultState onLoad();
+
     // 由于SuccessView都不一样，所以LoadingPage不能完成这项功能
     // 所以LoadingPage需要把创建SuccessView的工作叫给别人做
     public abstract View createSuccessView();
 
     private View createErrorView() {
-        // View view = View.inflate(context, resource, root)
         View view = UiUtils.inflateView(R.layout.layout_error);
         Button btnRetry = (Button) view.findViewById(R.id.btnRetry);
         btnRetry.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                loadData();
+                loadData();
                 Toast.makeText(UiUtils.getContext(), "加载~~~", Toast.LENGTH_SHORT).show();
             }
         });
@@ -100,5 +138,20 @@ public abstract class MainFragmentPage extends FrameLayout {
     private View createEmptyView() {
         View view = UiUtils.inflateView(R.layout.layout_empty);
         return view;
+    }
+
+    // 1、class-enum
+    // 2、创建对象的写法优化
+    // 3、构造方法私有
+    public enum ResultState {
+        ERROR(STATE_ERROR), SUCCESS(STATE_SUCCESS), LOADING(STATE_LOADING), EMPTY(
+                STATE_EMPTY);
+        int state;
+
+        private ResultState(int state) {
+            this.state = state;
+        }
+        // 通过控制对象的数量，达到表示某一个状态的效果
+
     }
 }

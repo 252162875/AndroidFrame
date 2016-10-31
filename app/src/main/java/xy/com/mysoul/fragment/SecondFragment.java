@@ -7,12 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import xy.com.mysoul.base.BaseFragment;
+import xy.com.mysoul.view.MainFragmentPage;
 
 public class SecondFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public MainFragmentPage.ResultState fragmentLoadData() {
+
+        return MainFragmentPage.ResultState.ERROR;
     }
 
     @Override
