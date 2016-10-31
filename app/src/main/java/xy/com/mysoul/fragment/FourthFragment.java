@@ -14,4 +14,9 @@ public class FourthFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+    @Override
+    public View fragmentCreateSuccessView() {
+        return null;
+    }
 }

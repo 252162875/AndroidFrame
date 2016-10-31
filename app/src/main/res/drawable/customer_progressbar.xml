@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- layer-list 是一层又一层的效果集合 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 两个效果 -->
+    <!--
+    	drawable:显示的图片
+    	fromDegrees:开始旋转的角度
+    	toDegrees:结束旋转的角度
+    	pivotX、pivotY：相对位置	技巧：动画的时间是一样的，通过改变旋转的角度，达到速度不同的效果
+    -->
+    <item>
+        <rotate
+            android:drawable="@drawable/spinner_big_inner"
+            android:fromDegrees="0"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="720" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/spinner_big_outer"
+            android:fromDegrees="360"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="0" />
+    </item>
+
+</layer-list>
