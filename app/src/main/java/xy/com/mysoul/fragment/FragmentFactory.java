@@ -34,7 +34,6 @@ public class FragmentFactory {
             }
             mSavedFragment.put(position, fragment);
         }
-
         return fragment;
     }
 

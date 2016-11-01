@@ -34,6 +34,7 @@ public abstract class BaseFragment extends Fragment {
                 return fragmentCreateSuccessView();
             }
         };
+        mainFragmentPage.loadData();
         return mainFragmentPage;
     }
 
