@@ -87,11 +87,11 @@ public abstract class MainFragmentPage extends FrameLayout {
                 @Override
                 public void run() {
 
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                     ResultState result = onLoad();
                     if (result != null) {

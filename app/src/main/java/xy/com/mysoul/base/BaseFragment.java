@@ -34,7 +34,6 @@ public abstract class BaseFragment extends Fragment {
                 return fragmentCreateSuccessView();
             }
         };
-        mainFragmentPage.loadData();
         return mainFragmentPage;
     }
 
@@ -42,6 +41,11 @@ public abstract class BaseFragment extends Fragment {
         if (mainFragmentPage != null) {
             mainFragmentPage.loadData();
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mainFragmentPage.loadData();
     }
 
     // BaseFragment不知道去加载哪一个url 也不知道如何加载，所以将此方法抽象，让子类实现
