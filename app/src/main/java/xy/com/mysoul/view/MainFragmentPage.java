@@ -1,6 +1,7 @@
 package xy.com.mysoul.view;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -17,32 +18,45 @@ public abstract class MainFragmentPage extends FrameLayout {
     public static final int STATE_EMPTY = 4;
 
     public int mCurrentState = STATE_NONE;
-
     private View mErrorView;
     private View mLoadingView;
     private View mEmptyView;
     private View mSuccessView;
+    private FrameLayout flMainfragmentContent;
+    private SwipeRefreshLayout swipe_refresh;
 
     public MainFragmentPage(Context context) {
         super(context);
         initView();
     }
 
+
     private void initView() {
+        this.setBackgroundColor(UiUtils.getColor(R.color.test));
+        View root = UiUtils.inflateView(R.layout.layout_main_fragment);
+        flMainfragmentContent = (FrameLayout) root.findViewById(R.id.fl_mainfragment_content);
+        swipe_refresh = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh);
+        swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+            }
+        });
         if (mErrorView == null) {
             mErrorView = createErrorView();
-            addView(mErrorView);
+            flMainfragmentContent.addView(mErrorView);
         }
         if (mLoadingView == null) {
             mLoadingView = createLoadingView();
-            addView(mLoadingView);
+            flMainfragmentContent.addView(mLoadingView);
         }
         if (mEmptyView == null) {
             mEmptyView = createEmptyView();
-            addView(mEmptyView);
+            flMainfragmentContent.addView(mEmptyView);
         }
 
         showRightPage();
+        addView(root);
     }
 
     private void showRightPage() {
@@ -58,7 +72,7 @@ public abstract class MainFragmentPage extends FrameLayout {
         if (mSuccessView == null && mCurrentState == STATE_SUCCESS) {
             mSuccessView = createSuccessView();
             if (mSuccessView != null) {
-                addView(mSuccessView);
+                flMainfragmentContent.addView(mSuccessView);
             }
 
         }
@@ -101,6 +115,9 @@ public abstract class MainFragmentPage extends FrameLayout {
                             @Override
                             public void run() {
                                 showRightPage();
+                                if (swipe_refresh.isRefreshing()) {
+                                    swipe_refresh.setRefreshing(false);
+                                }
                             }
                         });
 

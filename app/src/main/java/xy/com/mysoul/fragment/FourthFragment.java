@@ -2,12 +2,13 @@ package xy.com.mysoul.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import xy.com.mysoul.R;
+import xy.com.mysoul.adapter.TestAdapter;
 import xy.com.mysoul.base.BaseFragment;
 import xy.com.mysoul.utils.UiUtils;
 import xy.com.mysoul.view.MainFragmentPage;
@@ -27,9 +28,12 @@ public class FourthFragment extends BaseFragment {
 
     @Override
     public View fragmentCreateSuccessView() {
-        TextView tv = new TextView(UiUtils.getContext());
-        tv.setText(this.getClass().getSimpleName());
-        tv.setTextColor(UiUtils.getColor(R.color.pinkline));
-        return tv;
+//        TextView tv = new TextView(UiUtils.getContext());
+//        tv.setText(this.getClass().getSimpleName());
+//        tv.setTextColor(UiUtils.getColor(R.color.pinkline));
+        RecyclerView recyclerView = new RecyclerView(UiUtils.getContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(UiUtils.getContext(), RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(new TestAdapter());
+        return recyclerView;
     }
 }
