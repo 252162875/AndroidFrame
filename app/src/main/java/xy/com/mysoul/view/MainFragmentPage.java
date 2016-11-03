@@ -91,7 +91,7 @@ public abstract class MainFragmentPage extends FrameLayout {
     public void loadData() {
         if (mCurrentState != STATE_LOADING) {
             mCurrentState = STATE_NONE;
-            showRightPage();
+//            showRightPage();
         }
         if (mCurrentState == STATE_NONE) {
             // 加载网络数据

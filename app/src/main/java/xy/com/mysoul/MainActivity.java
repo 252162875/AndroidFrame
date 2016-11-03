@@ -3,7 +3,6 @@ package xy.com.mysoul;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -13,7 +12,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import xy.com.mysoul.base.BaseActivity;
 import xy.com.mysoul.base.BaseFragment;
-import xy.com.mysoul.fragment.FragmentFactory;
+import xy.com.mysoul.fragment.FifthFragment;
+import xy.com.mysoul.fragment.FirstFragment;
+import xy.com.mysoul.fragment.FourthFragment;
+import xy.com.mysoul.fragment.FragmentMap;
+import xy.com.mysoul.fragment.SecondFragment;
+import xy.com.mysoul.fragment.ThirdFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -22,12 +26,14 @@ public class MainActivity extends BaseActivity {
     private int frameLayoutId = R.id.fl_content;
     @BindView(R.id.tabs_main)
     TabLayout tabsMain;
+    private FragmentMap fragmentMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        fragmentMap = new FragmentMap();
         setTabs();
         initListener();
     }
@@ -74,7 +80,7 @@ public class MainActivity extends BaseActivity {
 //                        setSlidingMenuEnable(false);
                         break;
                 }
-                showFrl(i);
+                showFragment(i);
             }
 
             @Override
@@ -125,7 +131,7 @@ public class MainActivity extends BaseActivity {
         tabsMain.addTab(tab3);
         tabsMain.addTab(tab4);
         //程序启动就加载第一个fragment
-        showFrl(0);
+        showFragment(0);
     }
 
 
@@ -164,33 +170,29 @@ public class MainActivity extends BaseActivity {
      *
      * @param index
      */
-    protected void showFrl(int index) {
-
-        FragmentManager manage = getSupportFragmentManager();
-        FragmentTransaction transaction = manage.beginTransaction();
-        BaseFragment fm = FragmentFactory.getFragment(index);
-        if (fm.isVisible()) {
-            return;
-        }
-        if (fm.isAdded()) {
-            fm.onResume();
-        } else {
-            transaction.add(frameLayoutId, fm);
-        }
-
-        for (int i = 0; i < FragmentFactory.getFragmentCount(); i++) {
-            BaseFragment fragment = FragmentFactory.getFragments().get(i);
-            if (fragment != null) {
-                FragmentTransaction ft = this.getSupportFragmentManager()
-                        .beginTransaction();
-                if (index == i) {
-                    ft.show(fragment);
-                } else {
-                    ft.hide(fragment);
-                }
-                ft.commit();
+    protected void showFragment(int index) {
+        BaseFragment fragment = fragmentMap.getFragment(index);
+        if (fragment == null) {
+            switch (index) {
+                case 0:
+                    fragment = new FirstFragment();
+                    break;
+                case 1:
+                    fragment = new SecondFragment();
+                    break;
+                case 2:
+                    fragment = new ThirdFragment();
+                    break;
+                case 3:
+                    fragment = new FourthFragment();
+                    break;
+                case 4:
+                    fragment = new FifthFragment();
+                    break;
             }
+            fragmentMap.addFragment(index, fragment);
         }
-        transaction.commit();
+        FragmentManager manage = getSupportFragmentManager();
+        fragmentMap.showRightToTargt(index, flContent, manage);
     }
 }
