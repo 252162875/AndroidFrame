@@ -165,10 +165,8 @@ public abstract class MainFragmentPage extends FrameLayout {
                 STATE_EMPTY);
         int state;
 
-        private ResultState(int state) {
+        ResultState(int state) {
             this.state = state;
         }
-        // 通过控制对象的数量，达到表示某一个状态的效果
-
     }
 }

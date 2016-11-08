@@ -22,7 +22,6 @@ public class FourthFragment extends BaseFragment {
 
     @Override
     public MainFragmentPage.ResultState fragmentLoadData() {
-
         return MainFragmentPage.ResultState.SUCCESS;
     }
 
