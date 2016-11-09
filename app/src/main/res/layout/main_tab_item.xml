@@ -5,10 +5,10 @@
 
     <ImageView
         android:id="@+id/iv_main_tab"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_centerInParent="true"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         android:src="@drawable/home_hover2x" />
 
 </RelativeLayout>
